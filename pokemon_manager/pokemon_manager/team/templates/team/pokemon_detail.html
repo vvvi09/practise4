@@ -1,0 +1,23 @@
+{% extends "team/base.html" %}
+{% block title %}{{ pokemon.name|capfirst }} — Pokémon{% endblock %}
+{% block content %}
+  <p><a href="{% url 'team:list' %}">← К команде</a></p>
+  <div class="card">
+    {% if pokemon.sprite_url %}<img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.name }}" style="width:200px;height:200px">{% endif %}
+    <h1 style="text-transform:capitalize">{{ pokemon.name }} <span class="muted">#{{ pokemon.api_id }}</span></h1>
+    <table>
+      <tr><th>Типы</th><td>{% for t in pokemon.types_list %}<span class="badge">{{ t }}</span>{% endfor %}</td></tr>
+      <tr><th>Способности</th><td>{% for a in pokemon.abilities_list %}<span class="badge">{{ a }}</span>{% endfor %}</td></tr>
+      <tr><th>Рост</th><td>{{ pokemon.height_m }} м</td></tr>
+      <tr><th>Вес</th><td>{{ pokemon.weight_kg }} кг</td></tr>
+      <tr><th>В команде с</th><td>{{ pokemon.added_at|date:"d.m.Y H:i" }}</td></tr>
+    </table>
+    <h3>Характеристики</h3>
+    {% include "team/_stats.html" with p=pokemon %}
+    <div class="actions">
+      <form action="{% url 'team:remove' pokemon.pk %}" method="post" onsubmit="return confirm('Удалить из команды?')">
+        {% csrf_token %}<button class="danger" type="submit">Удалить из команды</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "team/base.html" %}
+{% block title %}Поиск — Pokémon{% endblock %}
+{% block content %}
+  <h1>Поиск покемона</h1>
+
+  {% if not query %}
+    <p class="muted">Введите имя покемона в строке поиска.</p>
+  {% else %}
+    {% if in_team %}
+      <h2>В вашей команде</h2>
+      <div class="grid">
+        {% for p in in_team %}{% include "team/_pokemon_card.html" %}{% endfor %}
+      </div>
+    {% endif %}
+
+    {% if found %}
+      <h2 style="margin-top:32px">Найден в PokeAPI</h2>
+      <div class="grid">
+        {% include "team/_pokemon_card.html" with p=found %}
+      </div>
+    {% endif %}
+  {% endif %}
+{% endblock %}

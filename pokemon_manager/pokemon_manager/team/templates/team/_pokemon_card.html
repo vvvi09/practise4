@@ -1,0 +1,27 @@
+{# Параметры: p — покемон (модель или dict), in_team — True/False #}
+<div class="card">
+  {% if p.sprite_url %}<img src="{{ p.sprite_url }}" alt="{{ p.name }}">{% endif %}
+  <h2>{% if p.pk %}<a href="{% url 'team:detail' p.pk %}">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}</h2>
+  <div class="muted">#{{ p.api_id }}</div>
+  <div>
+    {% if p.pk %}
+      {% for t in p.types_list %}<span class="badge">{{ t }}</span>{% endfor %}
+    {% else %}
+      <span class="badge">{{ p.types }}</span>
+    {% endif %}
+  </div>
+  <p class="muted">Рост: {% if p.pk %}{{ p.height_m }}{% else %}{{ p.height }} дм{% endif %}{% if p.pk %} м · Вес: {{ p.weight_kg }} кг{% else %} · Вес: {{ p.weight }} гг{% endif %}</p>
+  {% include "team/_stats.html" %}
+  <div class="actions">
+    {% if p.pk %}
+      <a href="{% url 'team:detail' p.pk %}">Подробнее</a>
+      <form action="{% url 'team:remove' p.pk %}" method="post" onsubmit="return confirm('Удалить {{ p.name|escapejs }} из команды?')">
+        {% csrf_token %}<button class="danger" type="submit">Удалить</button>
+      </form>
+    {% else %}
+      <form action="{% url 'team:add' %}" method="post">
+        {% csrf_token %}<input type="hidden" name="name" value="{{ p.name }}"><button type="submit">Добавить в команду</button>
+      </form>
+    {% endif %}
+  </div>
+</div>

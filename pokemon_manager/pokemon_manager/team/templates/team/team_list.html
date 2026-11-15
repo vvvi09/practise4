@@ -1,0 +1,21 @@
+{% extends "team/base.html" %}
+{% block title %}Моя команда — Pokémon{% endblock %}
+{% block content %}
+  <h1>Моя команда</h1>
+
+  <form class="inline-form" action="{% url 'team:add' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="Имя покемона (например, pikachu)" required>
+    <button type="submit">Добавить в команду</button>
+  </form>
+
+  {% if team %}
+    <div class="grid">
+      {% for p in team %}
+        {% include "team/_pokemon_card.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted">В вашей команде пока нет покемонов. Добавьте первого!</p>
+  {% endif %}
+{% endblock %}

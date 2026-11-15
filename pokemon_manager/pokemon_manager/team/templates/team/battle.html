@@ -1,0 +1,44 @@
+{% extends "team/base.html" %}
+{% block title %}Тренировочный бой — Pokémon{% endblock %}
+{% block content %}
+  <h1>Тренировочный бой</h1>
+
+  {% if team.count < 2 %}
+    <p class="muted">Для боя нужно минимум два покемона в команде. <a href="{% url 'team:list' %}">Добавить покемонов</a></p>
+  {% else %}
+    <form class="inline-form" method="post">
+      {% csrf_token %}
+      <select name="first" required>
+        <option value="">— Первый боец —</option>
+        {% for p in team %}<option value="{{ p.pk }}" {% if first_id == p.pk|stringformat:"s" %}selected{% endif %}>{{ p.name|capfirst }}</option>{% endfor %}
+      </select>
+      <span>vs</span>
+      <select name="second" required>
+        <option value="">— Второй боец —</option>
+        {% for p in team %}<option value="{{ p.pk }}" {% if second_id == p.pk|stringformat:"s" %}selected{% endif %}>{{ p.name|capfirst }}</option>{% endfor %}
+      </select>
+      <button type="submit">Начать бой!</button>
+    </form>
+  {% endif %}
+
+  {% if winner %}
+    <div class="vs">
+      {% include "team/_pokemon_card.html" with p=first %}
+      {% include "team/_pokemon_card.html" with p=second %}
+    </div>
+
+    <h2>Ход боя</h2>
+    <ol class="log">
+      {% for turn in log %}
+        <li>
+          <b style="text-transform:capitalize">{{ turn.attacker.name }}</b> наносит
+          <b>{{ turn.damage }}</b> урона →
+          <span style="text-transform:capitalize">{{ turn.defender.name }}</span>
+          <span class="muted">(HP: {{ turn.defender_hp }}/{{ turn.defender_max_hp }})</span>
+        </li>
+      {% endfor %}
+    </ol>
+
+    <h2>Победитель: <span class="winner">🏆 {{ winner.name }}</span></h2>
+  {% endif %}
+{% endblock %}
