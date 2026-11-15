@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Покемоны</title>
+</head>
+<body>
+    <h1>Первые 20 покемонов</h1>
+
+    <h2>Найти покемона</h2>
+
+    <form method="get">
+        <input
+            type="text"
+            name="pokemon_name"
+            placeholder="Введите имя покемона"
+        >
+
+        <button type="submit">Найти</button>
+    </form>
+
+    {% if pokemon_info %}
+        <h2>Информация о покемоне</h2>
+
+        <p><strong>Имя:</strong> {{ pokemon_info.name }}</p>
+        <p><strong>Тип:</strong> {{ pokemon_info.types|join:", " }}</p>
+        <p><strong>Вес:</strong> {{ pokemon_info.weight }} кг</p>
+        <p><strong>Рост:</strong> {{ pokemon_info.height }} м</p>
+        <p><strong>Способности:</strong> {{ pokemon_info.abilities|join:", " }}</p>
+    {% endif %}
+
+    <ul>
+        {% for pokemon in pokemon_names %}
+            <li>{{ pokemon }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

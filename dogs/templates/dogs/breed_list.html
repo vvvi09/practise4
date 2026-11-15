@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Породы собак</title>
+</head>
+<body>
+    <h1>Список пород собак</h1>
+
+    <h2>Найти фотографии пород</h2>
+
+    <form method="get">
+        <label for="breeds">Введите породы через запятую:</label>
+        <input
+            type="text"
+            id="breeds"
+            name="breeds"
+            placeholder="african, chow, dingo"
+        >
+        <button type="submit">Показать</button>
+    </form>
+
+    {% if images %}
+        <h2>Фотографии выбранных пород</h2>
+
+        {% for image in images %}
+            <h3>{{ image.breed }}</h3>
+            <img
+                src="{{ image.url }}"
+                alt="Фотография породы {{ image.breed }}"
+                width="300"
+            >
+        {% endfor %}
+    {% endif %}
+
+    <ol>
+        {% for breed in breeds %}
+            <li>{{ breed }}</li>
+        {% endfor %}
+    </ol>
+</body>
+</html>
